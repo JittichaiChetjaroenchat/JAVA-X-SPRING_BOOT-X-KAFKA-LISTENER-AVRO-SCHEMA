@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: Kafka - Listener
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    properties:
+      schema.registry.url: http://localhost:8081
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+#      retries: 3 # Number of retries for failed send requests
+    consumer:
+#      auto-offset-reset: earliest # What to do when no initial offset is found
+#      enable-auto-commit: true # Automatically commit offsets to Kafka
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        specific.avro.reader: true
+
+server:
+  port: 5555
+
+app:
+  kafka:
+    group: listener-group
+    topics:
+      notification-requests: "notification.requests"
